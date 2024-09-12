@@ -1,0 +1,547 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="LibraryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Book">
+          <Key>
+            <PropertyRef Name="BookID" />
+          </Key>
+          <Property Name="BookID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Author" Type="nvarchar(max)" />
+          <Property Name="ISBN" Type="nvarchar" MaxLength="17" Nullable="false" />
+          <Property Name="NumberOfCopies" Type="int" Nullable="false" />
+          <Property Name="Category" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="BorrowingAllowed" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MonthlyPay" Type="smallmoney" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="EnrolledFrom" Type="date" Nullable="false" />
+          <Property Name="EnrolledTo" Type="date" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="OIB" Type="decimal" Precision="11" Scale="0" />
+          <Property Name="Address" Type="nvarchar(max)" />
+          <Property Name="DateOfBirth" Type="date" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="nvarchar(max)" />
+          <Property Name="Sex" Type="nvarchar(max)" />
+          <Property Name="UserStatus" Type="nvarchar(max)" />
+          <Property Name="NumberOfBooks" Type="int" Nullable="false" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="MembershipCardNumber" Type="int" Nullable="false" />
+          <Property Name="PIN" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserBook">
+          <Key>
+            <PropertyRef Name="UserBookID" />
+          </Key>
+          <Property Name="UserBookID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="BookID" Type="int" Nullable="false" />
+          <Property Name="BorrowedDate" Type="date" Nullable="false" />
+          <Property Name="NumberOfDays" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserWorkshop">
+          <Key>
+            <PropertyRef Name="UserWorkshopID" />
+          </Key>
+          <Property Name="UserWorkshopID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="WorkshopID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Workshop">
+          <Key>
+            <PropertyRef Name="WorkshopID" />
+          </Key>
+          <Property Name="WorkshopID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="NumberOfAttendees" Type="int" Nullable="false" />
+          <Property Name="DurationMinutes" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
+          <Property Name="NumberOfTerms" Type="int" Nullable="false" />
+          <Property Name="Monday" Type="bit" Nullable="false" />
+          <Property Name="Tuesday" Type="bit" Nullable="false" />
+          <Property Name="Wednesday" Type="bit" Nullable="false" />
+          <Property Name="Thursday" Type="bit" Nullable="false" />
+          <Property Name="Friday" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Employee_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Member_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserBook_Book">
+          <End Role="Book" Type="Self.Book" Multiplicity="1" />
+          <End Role="UserBook" Type="Self.UserBook" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="BookID" />
+            </Principal>
+            <Dependent Role="UserBook">
+              <PropertyRef Name="BookID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserBook_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserBook" Type="Self.UserBook" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserBook">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserWorkshop_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserWorkshop" Type="Self.UserWorkshop" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserWorkshop">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserWorkshop_Workshop">
+          <End Role="Workshop" Type="Self.Workshop" Multiplicity="1" />
+          <End Role="UserWorkshop" Type="Self.UserWorkshop" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Workshop">
+              <PropertyRef Name="WorkshopID" />
+            </Principal>
+            <Dependent Role="UserWorkshop">
+              <PropertyRef Name="WorkshopID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LibraryModelStoreContainer">
+          <EntitySet Name="Book" EntityType="Self.Book" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Member" EntityType="Self.Member" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserBook" EntityType="Self.UserBook" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserWorkshop" EntityType="Self.UserWorkshop" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Workshop" EntityType="Self.Workshop" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Employee_User" Association="Self.FK_Employee_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Member_User" Association="Self.FK_Member_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Member" EntitySet="Member" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserBook_Book" Association="Self.FK_UserBook_Book">
+            <End Role="Book" EntitySet="Book" />
+            <End Role="UserBook" EntitySet="UserBook" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserBook_User" Association="Self.FK_UserBook_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserBook" EntitySet="UserBook" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserWorkshop_User" Association="Self.FK_UserWorkshop_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserWorkshop" EntitySet="UserWorkshop" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserWorkshop_Workshop" Association="Self.FK_UserWorkshop_Workshop">
+            <End Role="Workshop" EntitySet="Workshop" />
+            <End Role="UserWorkshop" EntitySet="UserWorkshop" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LibraryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Book">
+          <Key>
+            <PropertyRef Name="BookID" />
+          </Key>
+          <Property Name="BookID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Author" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ISBN" Type="String" MaxLength="17" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NumberOfCopies" Type="Int32" Nullable="false" />
+          <Property Name="Category" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BorrowingAllowed" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="UserBook" Relationship="Self.FK_UserBook_Book" FromRole="Book" ToRole="UserBook" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MonthlyPay" Type="Decimal" Precision="10" Scale="4" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Employee_User" FromRole="Employee" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EnrolledFrom" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EnrolledTo" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Member_User" FromRole="Member" ToRole="User" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="OIB" Type="Decimal" Precision="11" Scale="0" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateOfBirth" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Sex" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UserStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NumberOfBooks" Type="Int32" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MembershipCardNumber" Type="Int32" Nullable="false" />
+          <Property Name="PIN" Type="Decimal" Precision="4" Scale="0" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Employee_User" FromRole="User" ToRole="Employee" />
+          <NavigationProperty Name="Member" Relationship="Self.FK_Member_User" FromRole="User" ToRole="Member" />
+          <NavigationProperty Name="UserBook" Relationship="Self.FK_UserBook_User" FromRole="User" ToRole="UserBook" />
+          <NavigationProperty Name="UserWorkshop" Relationship="Self.FK_UserWorkshop_User" FromRole="User" ToRole="UserWorkshop" />
+        </EntityType>
+        <EntityType Name="UserBook">
+          <Key>
+            <PropertyRef Name="UserBookID" />
+          </Key>
+          <Property Name="UserBookID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="BookID" Type="Int32" Nullable="false" />
+          <Property Name="BorrowedDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="NumberOfDays" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Book" Relationship="Self.FK_UserBook_Book" FromRole="UserBook" ToRole="Book" />
+          <NavigationProperty Name="User" Relationship="Self.FK_UserBook_User" FromRole="UserBook" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UserWorkshop">
+          <Key>
+            <PropertyRef Name="UserWorkshopID" />
+          </Key>
+          <Property Name="UserWorkshopID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="WorkshopID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Self.FK_UserWorkshop_User" FromRole="UserWorkshop" ToRole="User" />
+          <NavigationProperty Name="Workshop" Relationship="Self.FK_UserWorkshop_Workshop" FromRole="UserWorkshop" ToRole="Workshop" />
+        </EntityType>
+        <EntityType Name="Workshop">
+          <Key>
+            <PropertyRef Name="WorkshopID" />
+          </Key>
+          <Property Name="WorkshopID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NumberOfAttendees" Type="Int32" Nullable="false" />
+          <Property Name="DurationMinutes" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="NumberOfTerms" Type="Int32" Nullable="false" />
+          <Property Name="Monday" Type="Boolean" Nullable="false" />
+          <Property Name="Tuesday" Type="Boolean" Nullable="false" />
+          <Property Name="Wednesday" Type="Boolean" Nullable="false" />
+          <Property Name="Thursday" Type="Boolean" Nullable="false" />
+          <Property Name="Friday" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="UserWorkshop" Relationship="Self.FK_UserWorkshop_Workshop" FromRole="Workshop" ToRole="UserWorkshop" />
+        </EntityType>
+        <Association Name="FK_UserBook_Book">
+          <End Role="Book" Type="Self.Book" Multiplicity="1" />
+          <End Role="UserBook" Type="Self.UserBook" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="BookID" />
+            </Principal>
+            <Dependent Role="UserBook">
+              <PropertyRef Name="BookID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Member_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserBook_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserBook" Type="Self.UserBook" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserBook">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserWorkshop_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserWorkshop" Type="Self.UserWorkshop" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserWorkshop">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserWorkshop_Workshop">
+          <End Role="Workshop" Type="Self.Workshop" Multiplicity="1" />
+          <End Role="UserWorkshop" Type="Self.UserWorkshop" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Workshop">
+              <PropertyRef Name="WorkshopID" />
+            </Principal>
+            <Dependent Role="UserWorkshop">
+              <PropertyRef Name="WorkshopID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LibraryEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Book" EntityType="Self.Book" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" />
+          <EntitySet Name="Member" EntityType="Self.Member" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <EntitySet Name="UserBook" EntityType="Self.UserBook" />
+          <EntitySet Name="UserWorkshop" EntityType="Self.UserWorkshop" />
+          <EntitySet Name="Workshop" EntityType="Self.Workshop" />
+          <AssociationSet Name="FK_UserBook_Book" Association="Self.FK_UserBook_Book">
+            <End Role="Book" EntitySet="Book" />
+            <End Role="UserBook" EntitySet="UserBook" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_User" Association="Self.FK_Employee_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Member_User" Association="Self.FK_Member_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Member" EntitySet="Member" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserBook_User" Association="Self.FK_UserBook_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserBook" EntitySet="UserBook" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserWorkshop_User" Association="Self.FK_UserWorkshop_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserWorkshop" EntitySet="UserWorkshop" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserWorkshop_Workshop" Association="Self.FK_UserWorkshop_Workshop">
+            <End Role="Workshop" EntitySet="Workshop" />
+            <End Role="UserWorkshop" EntitySet="UserWorkshop" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="LibraryModelStoreContainer" CdmEntityContainer="LibraryEntities">
+          <EntitySetMapping Name="Book">
+            <EntityTypeMapping TypeName="LibraryModel.Book">
+              <MappingFragment StoreEntitySet="Book">
+                <ScalarProperty Name="BookID" ColumnName="BookID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Author" ColumnName="Author" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="NumberOfCopies" ColumnName="NumberOfCopies" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="BorrowingAllowed" ColumnName="BorrowingAllowed" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employee">
+            <EntityTypeMapping TypeName="LibraryModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="MonthlyPay" ColumnName="MonthlyPay" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Member">
+            <EntityTypeMapping TypeName="LibraryModel.Member">
+              <MappingFragment StoreEntitySet="Member">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="EnrolledFrom" ColumnName="EnrolledFrom" />
+                <ScalarProperty Name="EnrolledTo" ColumnName="EnrolledTo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="LibraryModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="LibraryModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="OIB" ColumnName="OIB" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="UserStatus" ColumnName="UserStatus" />
+                <ScalarProperty Name="NumberOfBooks" ColumnName="NumberOfBooks" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="MembershipCardNumber" ColumnName="MembershipCardNumber" />
+                <ScalarProperty Name="PIN" ColumnName="PIN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserBook">
+            <EntityTypeMapping TypeName="LibraryModel.UserBook">
+              <MappingFragment StoreEntitySet="UserBook">
+                <ScalarProperty Name="UserBookID" ColumnName="UserBookID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="BookID" ColumnName="BookID" />
+                <ScalarProperty Name="BorrowedDate" ColumnName="BorrowedDate" />
+                <ScalarProperty Name="NumberOfDays" ColumnName="NumberOfDays" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserWorkshop">
+            <EntityTypeMapping TypeName="LibraryModel.UserWorkshop">
+              <MappingFragment StoreEntitySet="UserWorkshop">
+                <ScalarProperty Name="UserWorkshopID" ColumnName="UserWorkshopID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="WorkshopID" ColumnName="WorkshopID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Workshop">
+            <EntityTypeMapping TypeName="LibraryModel.Workshop">
+              <MappingFragment StoreEntitySet="Workshop">
+                <ScalarProperty Name="WorkshopID" ColumnName="WorkshopID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="NumberOfAttendees" ColumnName="NumberOfAttendees" />
+                <ScalarProperty Name="DurationMinutes" ColumnName="DurationMinutes" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="NumberOfTerms" ColumnName="NumberOfTerms" />
+                <ScalarProperty Name="Monday" ColumnName="Monday" />
+                <ScalarProperty Name="Tuesday" ColumnName="Tuesday" />
+                <ScalarProperty Name="Wednesday" ColumnName="Wednesday" />
+                <ScalarProperty Name="Thursday" ColumnName="Thursday" />
+                <ScalarProperty Name="Friday" ColumnName="Friday" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
