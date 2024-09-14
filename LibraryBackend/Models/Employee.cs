@@ -7,17 +7,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LibraryBackend
+namespace LibraryBackend.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Member
+    public partial class Employee
     {
         public int UserID { get; set; }
-        public string Status { get; set; }
-        public System.DateTime EnrolledFrom { get; set; }
-        public Nullable<System.DateTime> EnrolledTo { get; set; }
+        public decimal MonthlyPay { get; set; }
     
         public virtual User User { get; set; }
     }

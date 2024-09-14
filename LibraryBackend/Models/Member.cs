@@ -7,18 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LibraryBackend
+namespace LibraryBackend.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class UserWorkshop
+    public partial class Member
     {
-        public int UserWorkshopID { get; set; }
         public int UserID { get; set; }
-        public int WorkshopID { get; set; }
+        public string Status { get; set; }
+        public System.DateTime EnrolledFrom { get; set; }
+        public Nullable<System.DateTime> EnrolledTo { get; set; }
     
         public virtual User User { get; set; }
-        public virtual Workshop Workshop { get; set; }
     }
 }

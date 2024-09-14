@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LibraryBackend
+namespace LibraryBackend.Models
 {
     using System;
     using System.Collections.Generic;
