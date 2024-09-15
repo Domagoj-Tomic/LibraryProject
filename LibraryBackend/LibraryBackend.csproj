@@ -174,7 +174,13 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\GenericController.cs" />
+    <Compile Include="Controllers\MemberController.cs" />
+    <Compile Include="Controllers\UserBookController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\UserWorkshopController.cs" />
+    <Compile Include="Controllers\WorkshopController.cs" />
     <Compile Include="Models\Book.cs">
       <DependentUpon>LibraryModel.tt</DependentUpon>
     </Compile>
