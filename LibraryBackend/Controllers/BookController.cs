@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using LibraryBackend.Models;
 
-public class BooksController : ApiController
+public class BookController : ApiController
 {
     private LibraryEntities db = new LibraryEntities();
 
