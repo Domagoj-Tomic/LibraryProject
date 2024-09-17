@@ -86,13 +86,14 @@
 			this.AcceptButton = this.loginButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoSize = true;
 			this.ClientSize = new System.Drawing.Size(264, 211);
 			this.Controls.Add(this.loginButton);
 			this.Controls.Add(this.pinLabel);
 			this.Controls.Add(this.pinBox);
 			this.Controls.Add(this.usernameLabel);
 			this.Controls.Add(this.usernameBox);
-			this.MinimizeBox = false;
+			this.MaximizeBox = false;
 			this.Name = "loginForm";
 			this.Text = "Prijava";
 			this.ResumeLayout(false);

@@ -27,6 +27,7 @@ namespace LibraryBackend.Models
         public int NumberOfCopies { get; set; }
         public string Category { get; set; }
         public bool BorrowingAllowed { get; set; }
+        public byte[] CoverImage { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserBook> UserBook { get; set; }

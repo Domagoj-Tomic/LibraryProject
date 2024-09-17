@@ -10,8 +10,8 @@ namespace LibraryBackend.Controllers
 {
 	public class GenericController<TEntity> : ApiController where TEntity : class
 	{
-		private readonly DbContext _context;
-		private readonly DbSet<TEntity> _dbSet;
+		protected readonly DbContext _context;
+		protected readonly DbSet<TEntity> _dbSet;
 
 		public GenericController(DbContext context)
 		{

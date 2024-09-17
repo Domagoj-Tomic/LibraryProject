@@ -16,6 +16,7 @@
           <Property Name="NumberOfCopies" Type="int" Nullable="false" />
           <Property Name="Category" Type="nvarchar(max)" Nullable="false" />
           <Property Name="BorrowingAllowed" Type="bit" Nullable="false" />
+          <Property Name="CoverImage" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
@@ -218,6 +219,7 @@
           <Property Name="Category" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="BorrowingAllowed" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="UserBook" Relationship="Self.FK_UserBook_Book" FromRole="Book" ToRole="UserBook" />
+          <Property Name="CoverImage" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
@@ -424,6 +426,7 @@
           <EntitySetMapping Name="Book">
             <EntityTypeMapping TypeName="LibraryModel.Book">
               <MappingFragment StoreEntitySet="Book">
+                <ScalarProperty Name="CoverImage" ColumnName="CoverImage" />
                 <ScalarProperty Name="BookID" ColumnName="BookID" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Author" ColumnName="Author" />
