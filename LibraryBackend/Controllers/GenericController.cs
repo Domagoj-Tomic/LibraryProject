@@ -2,12 +2,13 @@
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Web.Http;
-using System.Web.Http.Description;
 
 namespace LibraryBackend.Controllers
 {
+	[RoutePrefix("api/[controller]")]
 	public class GenericController<TEntity> : ApiController where TEntity : class
 	{
 		protected readonly DbContext _context;
@@ -19,13 +20,17 @@ namespace LibraryBackend.Controllers
 			_dbSet = _context.Set<TEntity>();
 		}
 
-		// GET: api/Generic
+/*		// GET: api/[controller]		//Obriši ovo kasnije
+		[HttpGet]
+		[Route("")]
 		public IQueryable<TEntity> Get()
 		{
 			return _dbSet;
-		}
+		}*/
 
-		// GET: api/Generic/5
+		// GET: api/[controller]/{id}
+		[HttpGet]
+		[Route("/{id:int}")]
 		public IHttpActionResult Get(int id)
 		{
 			TEntity entity = _dbSet.Find(id);
@@ -37,7 +42,50 @@ namespace LibraryBackend.Controllers
 			return Ok(entity);
 		}
 
-		// PUT: api/Generic/5
+		// GET: api/[controller]
+		[HttpGet]
+		public IHttpActionResult Search([FromUri] string search = null, [FromUri] int limit = 50)
+		{
+			var entities = _dbSet.AsQueryable();
+
+			if (!string.IsNullOrEmpty(search))
+			{
+				var parameter = Expression.Parameter(typeof(TEntity), "e");
+				var properties = typeof(TEntity).GetProperties()
+					.Where(p => p.PropertyType == typeof(string));
+
+				Expression predicate = null;
+
+				foreach (var property in properties)
+				{
+					var propertyAccess = Expression.Property(parameter, property);
+					var containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
+					var searchExpression = Expression.Constant(search, typeof(string));
+					var containsExpression = Expression.Call(propertyAccess, containsMethod, searchExpression);
+
+					if (predicate == null)
+					{
+						predicate = containsExpression;
+					}
+					else
+					{
+						predicate = Expression.OrElse(predicate, containsExpression);
+					}
+				}
+
+				if (predicate != null)
+				{
+					var lambda = Expression.Lambda<Func<TEntity, bool>>(predicate, parameter);
+					entities = entities.Where(lambda);
+				}
+			}
+
+			return Ok(entities.Take(limit).ToList());
+		}
+
+		// PUT: api/[controller]/id/{id}
+		[HttpPut]
+		[Route("id/{id:int}")]
 		public IHttpActionResult Put(int id, TEntity entity)
 		{
 			if (!ModelState.IsValid)
@@ -66,7 +114,9 @@ namespace LibraryBackend.Controllers
 			return StatusCode(HttpStatusCode.NoContent);
 		}
 
-		// POST: api/Generic
+		// POST: api/[controller]
+		[HttpPost]
+		[Route("")]
 		public IHttpActionResult Post(TEntity entity)
 		{
 			if (!ModelState.IsValid)
@@ -81,7 +131,9 @@ namespace LibraryBackend.Controllers
 			return CreatedAtRoute("DefaultApi", new { id = key }, entity);
 		}
 
-		// DELETE: api/Generic/5
+		// DELETE: api/[controller]/id/{id}
+		[HttpDelete]
+		[Route("id/{id:int}")]
 		public IHttpActionResult Delete(int id)
 		{
 			TEntity entity = _dbSet.Find(id);

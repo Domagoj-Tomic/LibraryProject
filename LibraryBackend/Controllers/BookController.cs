@@ -1,4 +1,5 @@
 ﻿using LibraryBackend.Models;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -12,7 +13,7 @@ namespace LibraryBackend.Controllers
 		}
 
 		[HttpPost]
-		[Route("api/books/uploadCoverImage/{id}")]
+		[Route("api/Book/uploadCoverImage/{id}")]
 		public IHttpActionResult UploadCoverImage(int id, [FromBody] byte[] image)
 		{
 			var book = _dbSet.Find(id);
@@ -28,7 +29,7 @@ namespace LibraryBackend.Controllers
 		}
 
 		[HttpGet]
-		[Route("api/books/getCoverImage/{id}")]
+		[Route("api/Book/getCoverImage/{id}")]
 		public HttpResponseMessage GetCoverImage(int id)
 		{
 			var book = _dbSet.Find(id);

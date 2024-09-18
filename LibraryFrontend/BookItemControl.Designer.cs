@@ -37,31 +37,28 @@
 			this.titleLabel.AutoSize = true;
 			this.titleLabel.Location = new System.Drawing.Point(23, 20);
 			this.titleLabel.Name = "titleLabel";
-			this.titleLabel.Size = new System.Drawing.Size(49, 13);
+			this.titleLabel.Size = new System.Drawing.Size(23, 13);
 			this.titleLabel.TabIndex = 0;
-			this.titleLabel.Text = "titleLabel";
-			this.titleLabel.Click += new System.EventHandler(this.label1_Click);
+			this.titleLabel.Text = "title";
 			// 
 			// authorLabel
 			// 
 			this.authorLabel.AutoSize = true;
-			this.authorLabel.Location = new System.Drawing.Point(23, 44);
+			this.authorLabel.Location = new System.Drawing.Point(23, 35);
 			this.authorLabel.Name = "authorLabel";
-			this.authorLabel.Size = new System.Drawing.Size(63, 13);
+			this.authorLabel.Size = new System.Drawing.Size(37, 13);
 			this.authorLabel.TabIndex = 1;
-			this.authorLabel.Text = "authorLabel";
-			this.authorLabel.Click += new System.EventHandler(this.label2_Click);
+			this.authorLabel.Text = "author";
 			// 
 			// BookItemControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.AutoSize = true;
 			this.Controls.Add(this.authorLabel);
 			this.Controls.Add(this.titleLabel);
 			this.Name = "BookItemControl";
-			this.Padding = new System.Windows.Forms.Padding(5);
-			this.Size = new System.Drawing.Size(660, 76);
+			this.Padding = new System.Windows.Forms.Padding(20);
+			this.Size = new System.Drawing.Size(379, 68);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

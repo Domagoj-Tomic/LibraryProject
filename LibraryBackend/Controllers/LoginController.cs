@@ -4,6 +4,7 @@ using LibraryBackend.Repositories;
 
 namespace LibraryBackend.Controllers
 {
+	[RoutePrefix("api/login")]
 	public class LoginController : ApiController
 	{
 		private readonly UserRepository _userRepository;
@@ -14,7 +15,7 @@ namespace LibraryBackend.Controllers
 		}
 
 		[HttpPost]
-		[Route("api/login")]
+		[Route("")]
 		public IHttpActionResult Login(LoginModel login)
 		{
 			if (decimal.TryParse(login.Pin, out decimal pin))
@@ -22,7 +23,7 @@ namespace LibraryBackend.Controllers
 				var user = _userRepository.ValidateUser(login.Username, pin);
 				if (user != null)
 				{
-					return Ok();
+					return Ok(new { Message = "Login successful" });
 				}
 				return Unauthorized();
 			}
