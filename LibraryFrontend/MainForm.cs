@@ -17,6 +17,8 @@ namespace LibraryFrontend
 		{
 			InitializeComponent();
 			LoadBooks();
+			searchButton.Click += searchButton_Click;
+			clearSearchButton.Click += clearSearchButton_Click;
 		}
 
 		private async void LoadBooks()
@@ -74,7 +76,6 @@ namespace LibraryFrontend
 			groupBox1.Controls.Add(categoryLabel);
 			groupBox1.Controls.Add(borrowingAllowedLabel);
 
-			// Set the cover image in pictureBox1
 			if (book.CoverImage != null && book.CoverImage.Length > 0)
 			{
 				using (var ms = new System.IO.MemoryStream(book.CoverImage))
@@ -109,6 +110,11 @@ namespace LibraryFrontend
 			response.EnsureSuccessStatusCode();
 			var jsonString = await response.Content.ReadAsStringAsync();
 			return JsonConvert.DeserializeObject<List<Book>>(jsonString);
+		}
+
+		private void clearSearchButton_Click(object sender, System.EventArgs e)
+		{
+			LoadBooks();
 		}
 	}
 }
