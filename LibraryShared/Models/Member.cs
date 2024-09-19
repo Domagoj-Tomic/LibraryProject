@@ -7,17 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LibraryBackend.Models
+namespace LibraryShared.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class sysdiagrams
+    public partial class Member
     {
-        public string name { get; set; }
-        public int principal_id { get; set; }
-        public int diagram_id { get; set; }
-        public Nullable<int> version { get; set; }
-        public byte[] definition { get; set; }
+        public int UserID { get; set; }
+        public string Status { get; set; }
+        public System.DateTime EnrolledFrom { get; set; }
+        public Nullable<System.DateTime> EnrolledTo { get; set; }
+    
+        public virtual User User { get; set; }
     }
 }

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryBackend", "LibraryBa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryFrontend", "LibraryFrontend\LibraryFrontend.csproj", "{285ECBE5-5367-4642-9053-9A43A2EADD45}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryShared", "LibraryShared\LibraryShared.csproj", "{55AFA8E1-77AE-4BFC-B8CC-9FA99C8BFAC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{285ECBE5-5367-4642-9053-9A43A2EADD45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{285ECBE5-5367-4642-9053-9A43A2EADD45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{285ECBE5-5367-4642-9053-9A43A2EADD45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55AFA8E1-77AE-4BFC-B8CC-9FA99C8BFAC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55AFA8E1-77AE-4BFC-B8CC-9FA99C8BFAC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55AFA8E1-77AE-4BFC-B8CC-9FA99C8BFAC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55AFA8E1-77AE-4BFC-B8CC-9FA99C8BFAC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

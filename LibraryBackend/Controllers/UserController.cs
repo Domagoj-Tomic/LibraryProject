@@ -1,4 +1,4 @@
-﻿using LibraryBackend.Models;
+﻿using LibraryShared.Models;
 
 namespace LibraryBackend.Controllers
 {

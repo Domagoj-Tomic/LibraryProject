@@ -7,29 +7,32 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LibraryBackend.Models
+namespace LibraryShared.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Book
+    public partial class Workshop
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Book()
+        public Workshop()
         {
-            this.UserBook = new HashSet<UserBook>();
+            this.UserWorkshop = new HashSet<UserWorkshop>();
         }
     
-        public int BookID { get; set; }
-        public string Title { get; set; }
-        public string Author { get; set; }
-        public string ISBN { get; set; }
-        public int NumberOfCopies { get; set; }
-        public string Category { get; set; }
-        public bool BorrowingAllowed { get; set; }
-        public byte[] CoverImage { get; set; }
+        public int WorkshopID { get; set; }
+        public string Name { get; set; }
+        public int NumberOfAttendees { get; set; }
+        public int DurationMinutes { get; set; }
+        public System.DateTime StartDate { get; set; }
+        public int NumberOfTerms { get; set; }
+        public bool Monday { get; set; }
+        public bool Tuesday { get; set; }
+        public bool Wednesday { get; set; }
+        public bool Thursday { get; set; }
+        public bool Friday { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserBook> UserBook { get; set; }
+        public virtual ICollection<UserWorkshop> UserWorkshop { get; set; }
     }
 }

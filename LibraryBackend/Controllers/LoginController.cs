@@ -1,6 +1,7 @@
 using System.Web.Http;
 using LibraryBackend.Models;
 using LibraryBackend.Repositories;
+using LibraryShared.Models;
 
 namespace LibraryBackend.Controllers
 {

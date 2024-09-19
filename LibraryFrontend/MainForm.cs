@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using LibraryShared.Models;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -44,6 +45,12 @@ namespace LibraryFrontend
 		private async void SearchButton_Click(object sender, System.EventArgs e)
 		{
 			var query = searchTextBox.Text;
+			if (string.IsNullOrWhiteSpace(query))
+			{
+				MessageBox.Show("Please enter a search term.");
+				return;
+			}
+
 			var books = await SearchBooks(query, 50); // Cap the search results to 50 books
 			DisplayBooks(books);
 		}
@@ -55,17 +62,5 @@ namespace LibraryFrontend
 			var jsonString = await response.Content.ReadAsStringAsync();
 			return JsonConvert.DeserializeObject<List<Book>>(jsonString);
 		}
-	}
-
-	public class Book
-	{
-		public int BookID { get; set; }
-		public string Title { get; set; }
-		public string Author { get; set; }
-		public string ISBN { get; set; }
-		public int NumberOfCopies { get; set; }
-		public string Category { get; set; }
-		public bool BorrowingAllowed { get; set; }
-		public byte[] CoverImage { get; set; }
 	}
 }

@@ -7,18 +7,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LibraryBackend.Models
+namespace LibraryShared.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class UserWorkshop
+    public partial class Employee
     {
-        public int UserWorkshopID { get; set; }
         public int UserID { get; set; }
-        public int WorkshopID { get; set; }
+        public decimal MonthlyPay { get; set; }
     
         public virtual User User { get; set; }
-        public virtual Workshop Workshop { get; set; }
     }
 }

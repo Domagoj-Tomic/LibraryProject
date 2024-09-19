@@ -1,5 +1,5 @@
 using System.Linq;
-using LibraryBackend.Models;
+using LibraryShared.Models;
 
 namespace LibraryBackend.Repositories
 {
