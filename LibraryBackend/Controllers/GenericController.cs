@@ -21,12 +21,12 @@ namespace LibraryBackend.Controllers
 			_dbSet = _context.Set<TEntity>();
 
 			// Configure Serilog to log to a file on the desktop
-			Log.Logger = new LoggerConfiguration()
+			/*Log.Logger = new LoggerConfiguration()
 				.MinimumLevel.Debug() // Ensure the minimum level is set to Debug
 				.WriteTo.File(
 					path: System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "log.txt"),
 					rollingInterval: RollingInterval.Day)
-				.CreateLogger();
+				.CreateLogger();*/
 
 			// Enable SQL logging
 			_context.Database.Log = sql => Log.Debug(sql);

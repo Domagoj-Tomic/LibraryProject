@@ -144,6 +144,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LibraryBackend\LibraryBackend.csproj">
+      <Project>{09E761AC-F323-4289-85FB-3CADA2C3158B}</Project>
+      <Name>LibraryBackend</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LibraryShared\LibraryShared.csproj">
       <Project>{55afa8e1-77ae-4bfc-b8cc-9fa99c8bfac5}</Project>
       <Name>LibraryShared</Name>

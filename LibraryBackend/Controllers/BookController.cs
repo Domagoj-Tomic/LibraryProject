@@ -46,11 +46,6 @@ namespace LibraryBackend.Controllers
 			}
 		}
 
-		public class ImageUploadModel
-		{
-			public string Image { get; set; }
-		}
-
 		[HttpGet]
 		[Route("api/Book/getCoverImage/{id}")]
 		public HttpResponseMessage GetCoverImage(int id)
@@ -67,6 +62,11 @@ namespace LibraryBackend.Controllers
 			};
 			result.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg");
 			return result;
+		}
+
+		public class ImageUploadModel
+		{
+			public string Image { get; set; }
 		}
 	}
 }

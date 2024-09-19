@@ -9,8 +9,10 @@
 
 namespace LibraryShared.Models
 {
-    using System;
-    using System.Collections.Generic;
+	using LibraryShared.Converters;
+	using Newtonsoft.Json;
+	using System;
+	using System.Collections.Generic;
     
     public partial class User
     {
@@ -24,8 +26,9 @@ namespace LibraryShared.Models
         public int UserID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public Nullable<decimal> OIB { get; set; }
-        public string Address { get; set; }
+		[JsonConverter(typeof(DecimalToIntConverter))]
+		public Nullable<decimal> OIB { get; set; }
+		public string Address { get; set; }
         public System.DateTime DateOfBirth { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
@@ -34,9 +37,10 @@ namespace LibraryShared.Models
         public int NumberOfBooks { get; set; }
         public string PhoneNumber { get; set; }
         public int MembershipCardNumber { get; set; }
-        public decimal PIN { get; set; }
-    
-        public virtual Employee Employee { get; set; }
+		[JsonConverter(typeof(DecimalToIntConverter))]
+		public decimal PIN { get; set; }
+
+		public virtual Employee Employee { get; set; }
         public virtual Member Member { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserBook> UserBook { get; set; }
