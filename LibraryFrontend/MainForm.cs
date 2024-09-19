@@ -42,7 +42,7 @@ namespace LibraryFrontend
 			}
 		}
 
-		private async void SearchButton_Click(object sender, System.EventArgs e)
+		private async void searchButton_Click(object sender, System.EventArgs e)
 		{
 			var query = searchTextBox.Text;
 			if (string.IsNullOrWhiteSpace(query))
@@ -57,7 +57,8 @@ namespace LibraryFrontend
 
 		private async Task<List<Book>> SearchBooks(string query, int limit)
 		{
-			var response = await _httpClient.GetAsync($"{ApiBaseUrl}?search={query}&limit={limit}");
+			var url = $"{ApiBaseUrl}?search={query}&limit={limit}";
+			var response = await _httpClient.GetAsync(url);
 			response.EnsureSuccessStatusCode();
 			var jsonString = await response.Content.ReadAsStringAsync();
 			return JsonConvert.DeserializeObject<List<Book>>(jsonString);

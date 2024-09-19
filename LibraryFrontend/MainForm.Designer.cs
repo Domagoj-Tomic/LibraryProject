@@ -79,6 +79,7 @@
 			this.searchButton.TabIndex = 5;
 			this.searchButton.Text = "Pretraži";
 			this.searchButton.UseVisualStyleBackColor = true;
+			this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
 			// 
 			// MainForm
 			// 

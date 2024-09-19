@@ -30,6 +30,12 @@ namespace LibraryBackend.Controllers
 
 			// Enable SQL logging
 			_context.Database.Log = sql => Log.Debug(sql);
+
+			Log.Information("" +
+				"\n~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~" +
+				"\n~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~" +
+				"\n"
+				);
 		}
 
 		// GET: api/[controller]/{id}
