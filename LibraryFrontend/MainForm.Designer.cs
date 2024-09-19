@@ -92,7 +92,7 @@
 			this.Controls.Add(this.flowLayoutPanel1);
 			this.Controls.Add(this.pictureBox1);
 			this.Name = "MainForm";
-			this.Text = "MainForm";
+			this.Text = "Knjižnica";
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();

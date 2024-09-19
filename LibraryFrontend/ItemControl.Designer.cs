@@ -1,6 +1,6 @@
 ﻿namespace LibraryFrontend
 {
-	partial class BookItemControl
+	partial class ItemControl
 	{
 		/// <summary> 
 		/// Required designer variable.
@@ -30,12 +30,14 @@
 		{
 			this.titleLabel = new System.Windows.Forms.Label();
 			this.authorLabel = new System.Windows.Forms.Label();
+			this.thumbnailPictureBox = new System.Windows.Forms.PictureBox();
+			((System.ComponentModel.ISupportInitialize)(this.thumbnailPictureBox)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// titleLabel
 			// 
 			this.titleLabel.AutoSize = true;
-			this.titleLabel.Location = new System.Drawing.Point(23, 20);
+			this.titleLabel.Location = new System.Drawing.Point(52, 20);
 			this.titleLabel.Name = "titleLabel";
 			this.titleLabel.Size = new System.Drawing.Size(23, 13);
 			this.titleLabel.TabIndex = 0;
@@ -44,21 +46,31 @@
 			// authorLabel
 			// 
 			this.authorLabel.AutoSize = true;
-			this.authorLabel.Location = new System.Drawing.Point(23, 35);
+			this.authorLabel.Location = new System.Drawing.Point(52, 35);
 			this.authorLabel.Name = "authorLabel";
 			this.authorLabel.Size = new System.Drawing.Size(37, 13);
 			this.authorLabel.TabIndex = 1;
 			this.authorLabel.Text = "author";
 			// 
-			// BookItemControl
+			// thumbnailPictureBox
+			// 
+			this.thumbnailPictureBox.Location = new System.Drawing.Point(11, 10);
+			this.thumbnailPictureBox.Name = "thumbnailPictureBox";
+			this.thumbnailPictureBox.Size = new System.Drawing.Size(35, 47);
+			this.thumbnailPictureBox.TabIndex = 2;
+			this.thumbnailPictureBox.TabStop = false;
+			// 
+			// ItemControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.thumbnailPictureBox);
 			this.Controls.Add(this.authorLabel);
 			this.Controls.Add(this.titleLabel);
-			this.Name = "BookItemControl";
+			this.Name = "ItemControl";
 			this.Padding = new System.Windows.Forms.Padding(20);
 			this.Size = new System.Drawing.Size(379, 68);
+			((System.ComponentModel.ISupportInitialize)(this.thumbnailPictureBox)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -68,5 +80,6 @@
 
 		private System.Windows.Forms.Label titleLabel;
 		private System.Windows.Forms.Label authorLabel;
+		private System.Windows.Forms.PictureBox thumbnailPictureBox;
 	}
 }
