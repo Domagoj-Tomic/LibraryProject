@@ -20,8 +20,8 @@ namespace LibraryBackend.Controllers
 			_context = context;
 			_dbSet = _context.Set<TEntity>();
 
-			// Configure Serilog to log to a file on the desktop
-			/*Log.Logger = new LoggerConfiguration()
+			/*// Configure Serilog to log to a file on the desktop
+			Log.Logger = new LoggerConfiguration()
 				.MinimumLevel.Debug() // Ensure the minimum level is set to Debug
 				.WriteTo.File(
 					path: System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "log.txt"),
@@ -40,7 +40,7 @@ namespace LibraryBackend.Controllers
 
 		// GET: api/[controller]/{id}
 		[HttpGet]
-		[Route("/{id:int}")]
+		[Route("{id:int}")]
 		public IHttpActionResult Get(int id)
 		{
 			Log.Information("Fetching entity with ID {Id}", id);
@@ -110,11 +110,17 @@ namespace LibraryBackend.Controllers
 			return Ok(result);
 		}
 
-		// PUT: api/[controller]/id/{id}
+		// PUT: api/[controller]/{id}
 		[HttpPut]
-		[Route("id/{id:int}")]
+		[Route("/{id:int}")]
 		public IHttpActionResult Put(int id, TEntity entity)
 		{
+			if (id == 0)
+			{
+				Log.Information("ID is 0, redirecting to Post method to create a new entity");
+				return Post(entity);
+			}
+
 			Log.Information("Updating entity with ID {Id}", id);
 			if (!ModelState.IsValid)
 			{
@@ -139,7 +145,7 @@ namespace LibraryBackend.Controllers
 				else
 				{
 					Log.Error("Concurrency exception occurred while updating entity with ID {Id}", id);
-					throw;
+					return Conflict(); // Return a conflict response
 				}
 			}
 
@@ -166,9 +172,9 @@ namespace LibraryBackend.Controllers
 			return CreatedAtRoute("DefaultApi", new { id = key }, entity);
 		}
 
-		// DELETE: api/[controller]/id/{id}
+		// DELETE: api/[controller]/{id}
 		[HttpDelete]
-		[Route("id/{id:int}")]
+		[Route("{id:int}")]
 		public IHttpActionResult Delete(int id)
 		{
 			Log.Information("Deleting entity with ID {Id}", id);
@@ -201,7 +207,7 @@ namespace LibraryBackend.Controllers
 				// Fallback to convention-based key property names
 				keyProperty = typeof(TEntity).GetProperties()
 					.FirstOrDefault(p => p.Name.Equals(typeof(TEntity).Name + "ID", StringComparison.OrdinalIgnoreCase) ||
-p.Name.Equals("ID", StringComparison.OrdinalIgnoreCase));
+										 p.Name.Equals("ID", StringComparison.OrdinalIgnoreCase));
 			}
 
 			if (keyProperty == null)

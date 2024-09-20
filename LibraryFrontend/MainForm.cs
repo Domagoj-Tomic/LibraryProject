@@ -24,6 +24,7 @@ namespace LibraryFrontend
 			InitializeButtons();
 			LoadInitialEntities();
 			pictureBox1.Click += PictureBox1_Click;
+			deleteButton.Click += deleteButton_Click;
 		}
 
 		private async void LoadInitialEntities()
@@ -37,8 +38,11 @@ namespace LibraryFrontend
 			bookButton.Click += (sender, e) => SwitchView<Book>("Book", bookButton);
 			userButton.Click += (sender, e) => SwitchView<User>("User", userButton);
 			workshopButton.Click += (sender, e) => SwitchView<Workshop>("Workshop", workshopButton);
-			editButton.Click += (sender, e) => ShowEditTextBox();
-			saveChangesButton.Click += (sender, e) => SaveJsonChanges();
+			editButton.Click += editButton_Click;
+			saveChangesButton.Click += saveChangesButton_Click;
+			deleteButton.Click += deleteButton_Click;
+			createButton.Click += createButton_Click;
+			saveChangesButton.Enabled = false;
 		}
 
 		private async void SwitchView<T>(string endpoint, Button selectedButton)
@@ -198,7 +202,7 @@ namespace LibraryFrontend
 			}
 		}
 
-		private async void SaveJsonChanges()
+		private async Task SaveJsonChanges()
 		{
 			try
 			{
@@ -227,14 +231,24 @@ namespace LibraryFrontend
 				Console.WriteLine("Sending JSON content:");
 				Console.WriteLine(jsonContent);*/
 
-				// Send the updated entity to the server
-				var response = await _httpClient.PutAsync($"{ApiBaseUrl}{_currentView}/{GetEntityId(_currentEntity)}", content);
+				HttpResponseMessage response;
+				if (_currentEntity == null)
+				{
+					// Create new entity
+					response = await _httpClient.PostAsync($"{ApiBaseUrl}{_currentView}", content);
+				}
+				else
+				{
+					// Update existing entity
+					response = await _httpClient.PutAsync($"{ApiBaseUrl}{_currentView}/{GetEntityId(_currentEntity)}", content);
+				}
+
 				response.EnsureSuccessStatusCode();
 
-				MessageBox.Show("Changes saved successfully.");
+				MessageBox.Show("Spremanje uspješno.");
 				editTextBox.Visible = false;
-				groupBox1.Visible = true;        
-				
+				groupBox1.Visible = true;
+
 				// Refresh entities based on the search field content
 				var query = searchTextBox.Text;
 				if (string.IsNullOrWhiteSpace(query))
@@ -357,7 +371,7 @@ namespace LibraryFrontend
 
 		private async void clearSearchButton_Click(object sender, EventArgs e)
 		{
-			searchTextBox.Text = string.Empty; // Clear the search text
+			searchTextBox.Text = string.Empty;
 			await LoadEntitiesBasedOnCurrentView();
 		}
 		private async void PictureBox1_Click(object sender, EventArgs e)
@@ -367,7 +381,7 @@ namespace LibraryFrontend
 				using (OpenFileDialog openFileDialog = new OpenFileDialog())
 				{
 					openFileDialog.Filter = "JPG files (*.jpg)|*.jpg";
-					openFileDialog.Title = "Select a JPG cover image";
+					openFileDialog.Title = "Odaberite .jpg sliku";
 
 					if (openFileDialog.ShowDialog() == DialogResult.OK)
 					{
@@ -383,7 +397,7 @@ namespace LibraryFrontend
 							var response = await _httpClient.PostAsync($"{ApiBaseUrl}Book/uploadCoverImage/{book.BookID}", content);
 							response.EnsureSuccessStatusCode();
 
-							MessageBox.Show("Cover image uploaded successfully.");
+							MessageBox.Show("Slika naslovnice uspiješno uploadana.");
 							book.CoverImage = imageBytes; // Update the local book object
 							ShowBookDetails(book); // Refresh the book details to show the new image
 						}
@@ -396,8 +410,119 @@ namespace LibraryFrontend
 			}
 			else
 			{
-				MessageBox.Show("Image upload is only available for books.");
+				MessageBox.Show("Samo knjige mogu imati sliku.");
 			}
+		}
+		private void editButton_Click(object sender, EventArgs e)
+		{
+			if (editTextBox.Visible)
+			{
+				// Cancel editing
+				editTextBox.Visible = false;
+				groupBox1.Visible = true;
+				editButton.Text = "Izmjeni";
+				saveChangesButton.Enabled = false;
+			}
+			else
+			{
+				// Start editing
+				ShowEditTextBox();
+				editButton.Text = "Otkaži";
+				saveChangesButton.Enabled = true;
+			}
+		}
+		private async void saveChangesButton_Click(object sender, EventArgs e)
+		{
+			await SaveJsonChanges();
+			editButton.Text = "Izmjeni";
+			saveChangesButton.Enabled = false;
+		}
+		private async void deleteButton_Click(object sender, EventArgs e)
+		{
+			if (_currentEntity == null)
+			{
+				MessageBox.Show("Odaberite predmet za brisanje.");
+				return;
+			}
+
+			var result = MessageBox.Show("Jeste li sigurni da želite obrisati odabrani predmet?", "Brisanje", MessageBoxButtons.YesNo);
+			if (result == DialogResult.Yes)
+			{
+				try
+				{
+					var entityId = GetEntityId(_currentEntity);
+					var response = await _httpClient.DeleteAsync($"{ApiBaseUrl}{_currentView}/{entityId}");
+					response.EnsureSuccessStatusCode();
+
+					MessageBox.Show("Brisanje uspješno.");
+					_currentEntity = null; // Clear the current entity
+					await LoadEntitiesBasedOnCurrentView(); // Refresh the list of entities
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show($"Error deleting item: {ex.Message}");
+				}
+			}
+		}
+		private string GetJsonTemplate(string entityType)
+		{
+			switch (entityType)
+			{
+				case "Book":
+					return JsonConvert.SerializeObject(new
+					{
+						Title = "Unesite naslov",
+						Author = "Unesite autora",
+						ISBN = "Unesite ISBN",
+						NumberOfCopies = 0,
+						Category = "Unesite kategoriju",
+						BorrowingAllowed = false,
+						CoverImage = (byte[])null
+					}, Formatting.Indented);
+				case "User":
+					return JsonConvert.SerializeObject(new
+					{
+						FirstName = "Unesite ime",
+						LastName = "Unesite prezime",
+						OIB = (decimal?)null,
+						Address = "Unesite adresu",
+						DateOfBirth = DateTime.Now,
+						Username = "Unesite korisničko ime",
+						Email = "Unesite email",
+						Sex = "Unesite spol",
+						UserStatus = "Unesite status korisnika",
+						NumberOfBooks = 0,
+						PhoneNumber = "Unesite broj telefona",
+						MembershipCardNumber = 0,
+						PIN = 0
+					}, Formatting.Indented);
+				case "Workshop":
+					return JsonConvert.SerializeObject(new
+					{
+						Name = "Unesite ime radionice",
+						NumberOfAttendees = 0,
+						DurationMinutes = 0,
+						StartDate = DateTime.Now,
+						NumberOfTerms = 0,
+						Monday = false,
+						Tuesday = false,
+						Wednesday = false,
+						Thursday = false,
+						Friday = false
+					}, Formatting.Indented);
+				default:
+					throw new InvalidOperationException("Unknown entity type");
+			}
+		}
+		private void createButton_Click(object sender, EventArgs e)
+		{
+			var jsonTemplate = GetJsonTemplate(_currentView);
+			editTextBox.Text = jsonTemplate;
+			editTextBox.Visible = true;
+			groupBox1.Visible = false;
+			editButton.Text = "Otkaži";
+			saveChangesButton.Enabled = true;
+			_currentEntity = null; // Clear the current entity to indicate a new creation
 		}
 	}
 }

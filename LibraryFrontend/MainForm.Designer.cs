@@ -41,6 +41,7 @@
 			this.saveChangesButton = new System.Windows.Forms.Button();
 			this.deleteButton = new System.Windows.Forms.Button();
 			this.editTextBox = new System.Windows.Forms.TextBox();
+			this.createButton = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -85,7 +86,7 @@
 			this.groupBox1.Location = new System.Drawing.Point(477, 0);
 			this.groupBox1.Margin = new System.Windows.Forms.Padding(0);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(775, 588);
+			this.groupBox1.Size = new System.Drawing.Size(775, 539);
 			this.groupBox1.TabIndex = 2;
 			this.groupBox1.TabStop = false;
 			// 
@@ -162,15 +163,25 @@
 			this.editTextBox.TabIndex = 16;
 			this.editTextBox.Visible = false;
 			// 
+			// createButton
+			// 
+			this.createButton.Location = new System.Drawing.Point(770, 552);
+			this.createButton.Name = "createButton";
+			this.createButton.Size = new System.Drawing.Size(112, 27);
+			this.createButton.TabIndex = 17;
+			this.createButton.Text = "Dodaj";
+			this.createButton.UseVisualStyleBackColor = true;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1247, 584);
+			this.Controls.Add(this.deleteButton);
+			this.Controls.Add(this.createButton);
 			this.Controls.Add(this.editTextBox);
 			this.Controls.Add(this.editButton);
 			this.Controls.Add(this.saveChangesButton);
-			this.Controls.Add(this.deleteButton);
 			this.Controls.Add(this.workshopButton);
 			this.Controls.Add(this.userButton);
 			this.Controls.Add(this.bookButton);
@@ -203,5 +214,6 @@
 		private System.Windows.Forms.Button saveChangesButton;
 		private System.Windows.Forms.Button deleteButton;
 		private System.Windows.Forms.TextBox editTextBox;
+		private System.Windows.Forms.Button createButton;
 	}
 }
