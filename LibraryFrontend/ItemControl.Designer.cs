@@ -31,6 +31,7 @@
 			this.titleLabel = new System.Windows.Forms.Label();
 			this.authorLabel = new System.Windows.Forms.Label();
 			this.thumbnailPictureBox = new System.Windows.Forms.PictureBox();
+			this.joinButton = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.thumbnailPictureBox)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -60,16 +61,26 @@
 			this.thumbnailPictureBox.TabIndex = 2;
 			this.thumbnailPictureBox.TabStop = false;
 			// 
+			// joinButton
+			// 
+			this.joinButton.Location = new System.Drawing.Point(270, 23);
+			this.joinButton.Name = "joinButton";
+			this.joinButton.Size = new System.Drawing.Size(57, 23);
+			this.joinButton.TabIndex = 3;
+			this.joinButton.Text = "Pridjeli";
+			this.joinButton.UseVisualStyleBackColor = true;
+			// 
 			// ItemControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.joinButton);
 			this.Controls.Add(this.thumbnailPictureBox);
 			this.Controls.Add(this.authorLabel);
 			this.Controls.Add(this.titleLabel);
 			this.Name = "ItemControl";
 			this.Padding = new System.Windows.Forms.Padding(20);
-			this.Size = new System.Drawing.Size(379, 68);
+			this.Size = new System.Drawing.Size(350, 65);
 			((System.ComponentModel.ISupportInitialize)(this.thumbnailPictureBox)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -81,5 +92,6 @@
 		private System.Windows.Forms.Label titleLabel;
 		private System.Windows.Forms.Label authorLabel;
 		private System.Windows.Forms.PictureBox thumbnailPictureBox;
+		private System.Windows.Forms.Button joinButton;
 	}
 }

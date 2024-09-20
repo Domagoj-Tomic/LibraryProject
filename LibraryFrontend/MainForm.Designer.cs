@@ -42,13 +42,14 @@
 			this.deleteButton = new System.Windows.Forms.Button();
 			this.editTextBox = new System.Windows.Forms.TextBox();
 			this.createButton = new System.Windows.Forms.Button();
+			this.cancelButton = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// pictureBox1
 			// 
 			this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pictureBox1.Location = new System.Drawing.Point(228, 0);
+			this.pictureBox1.Location = new System.Drawing.Point(353, 0);
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.Size = new System.Drawing.Size(246, 336);
 			this.pictureBox1.TabIndex = 0;
@@ -60,20 +61,20 @@
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(225, 588);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(350, 590);
 			this.flowLayoutPanel1.TabIndex = 1;
 			this.flowLayoutPanel1.WrapContents = false;
 			// 
 			// searchTextBox
 			// 
-			this.searchTextBox.Location = new System.Drawing.Point(228, 342);
+			this.searchTextBox.Location = new System.Drawing.Point(353, 342);
 			this.searchTextBox.Name = "searchTextBox";
 			this.searchTextBox.Size = new System.Drawing.Size(245, 20);
 			this.searchTextBox.TabIndex = 3;
 			// 
 			// searchButton
 			// 
-			this.searchButton.Location = new System.Drawing.Point(228, 368);
+			this.searchButton.Location = new System.Drawing.Point(353, 368);
 			this.searchButton.Name = "searchButton";
 			this.searchButton.Size = new System.Drawing.Size(65, 25);
 			this.searchButton.TabIndex = 5;
@@ -83,16 +84,16 @@
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Location = new System.Drawing.Point(477, 0);
+			this.groupBox1.Location = new System.Drawing.Point(602, 0);
 			this.groupBox1.Margin = new System.Windows.Forms.Padding(0);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(775, 539);
+			this.groupBox1.Size = new System.Drawing.Size(639, 539);
 			this.groupBox1.TabIndex = 2;
 			this.groupBox1.TabStop = false;
 			// 
 			// clearSearchButton
 			// 
-			this.clearSearchButton.Location = new System.Drawing.Point(299, 368);
+			this.clearSearchButton.Location = new System.Drawing.Point(424, 368);
 			this.clearSearchButton.Name = "clearSearchButton";
 			this.clearSearchButton.Size = new System.Drawing.Size(97, 25);
 			this.clearSearchButton.TabIndex = 6;
@@ -102,7 +103,7 @@
 			// 
 			// bookButton
 			// 
-			this.bookButton.Location = new System.Drawing.Point(228, 551);
+			this.bookButton.Location = new System.Drawing.Point(353, 551);
 			this.bookButton.Name = "bookButton";
 			this.bookButton.Size = new System.Drawing.Size(68, 21);
 			this.bookButton.TabIndex = 7;
@@ -111,7 +112,7 @@
 			// 
 			// userButton
 			// 
-			this.userButton.Location = new System.Drawing.Point(302, 551);
+			this.userButton.Location = new System.Drawing.Point(427, 551);
 			this.userButton.Name = "userButton";
 			this.userButton.Size = new System.Drawing.Size(68, 21);
 			this.userButton.TabIndex = 8;
@@ -120,16 +121,16 @@
 			// 
 			// workshopButton
 			// 
-			this.workshopButton.Location = new System.Drawing.Point(376, 551);
+			this.workshopButton.Location = new System.Drawing.Point(501, 551);
 			this.workshopButton.Name = "workshopButton";
-			this.workshopButton.Size = new System.Drawing.Size(63, 21);
+			this.workshopButton.Size = new System.Drawing.Size(68, 21);
 			this.workshopButton.TabIndex = 9;
 			this.workshopButton.Text = "Radionice";
 			this.workshopButton.UseVisualStyleBackColor = true;
 			// 
 			// editButton
 			// 
-			this.editButton.Location = new System.Drawing.Point(1006, 552);
+			this.editButton.Location = new System.Drawing.Point(1011, 552);
 			this.editButton.Name = "editButton";
 			this.editButton.Size = new System.Drawing.Size(112, 27);
 			this.editButton.TabIndex = 15;
@@ -138,7 +139,7 @@
 			// 
 			// saveChangesButton
 			// 
-			this.saveChangesButton.Location = new System.Drawing.Point(1124, 552);
+			this.saveChangesButton.Location = new System.Drawing.Point(1129, 552);
 			this.saveChangesButton.Name = "saveChangesButton";
 			this.saveChangesButton.Size = new System.Drawing.Size(112, 27);
 			this.saveChangesButton.TabIndex = 14;
@@ -147,7 +148,7 @@
 			// 
 			// deleteButton
 			// 
-			this.deleteButton.Location = new System.Drawing.Point(888, 552);
+			this.deleteButton.Location = new System.Drawing.Point(893, 552);
 			this.deleteButton.Name = "deleteButton";
 			this.deleteButton.Size = new System.Drawing.Size(112, 27);
 			this.deleteButton.TabIndex = 13;
@@ -156,27 +157,37 @@
 			// 
 			// editTextBox
 			// 
-			this.editTextBox.Location = new System.Drawing.Point(477, 0);
+			this.editTextBox.Location = new System.Drawing.Point(602, 0);
 			this.editTextBox.Multiline = true;
 			this.editTextBox.Name = "editTextBox";
-			this.editTextBox.Size = new System.Drawing.Size(758, 539);
+			this.editTextBox.Size = new System.Drawing.Size(639, 539);
 			this.editTextBox.TabIndex = 16;
 			this.editTextBox.Visible = false;
 			// 
 			// createButton
 			// 
-			this.createButton.Location = new System.Drawing.Point(770, 552);
+			this.createButton.Location = new System.Drawing.Point(775, 552);
 			this.createButton.Name = "createButton";
 			this.createButton.Size = new System.Drawing.Size(112, 27);
 			this.createButton.TabIndex = 17;
 			this.createButton.Text = "Dodaj";
 			this.createButton.UseVisualStyleBackColor = true;
 			// 
+			// cancelButton
+			// 
+			this.cancelButton.Location = new System.Drawing.Point(602, 552);
+			this.cancelButton.Name = "cancelButton";
+			this.cancelButton.Size = new System.Drawing.Size(112, 27);
+			this.cancelButton.TabIndex = 19;
+			this.cancelButton.Text = "Otkaži";
+			this.cancelButton.UseVisualStyleBackColor = true;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1247, 584);
+			this.ClientSize = new System.Drawing.Size(1242, 584);
+			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.deleteButton);
 			this.Controls.Add(this.createButton);
 			this.Controls.Add(this.editTextBox);
@@ -215,5 +226,6 @@
 		private System.Windows.Forms.Button deleteButton;
 		private System.Windows.Forms.TextBox editTextBox;
 		private System.Windows.Forms.Button createButton;
+		private System.Windows.Forms.Button cancelButton;
 	}
 }

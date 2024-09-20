@@ -1,4 +1,5 @@
-﻿using LibraryShared.Models;
+﻿using LibraryFrontend.LibraryFrontend;
+using LibraryShared.Models;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
@@ -7,12 +8,23 @@ using static LibraryBackend.Controllers.BookController;
 
 namespace LibraryFrontend
 {
+	namespace LibraryFrontend
+	{
+		public enum FormMode
+		{
+			None,
+			Edit,
+			Add
+		}
+	}
+
 	public partial class MainForm : Form
 	{
 		private readonly HttpClient _httpClient = new HttpClient();
 		private const string ApiBaseUrl = "https://localhost:44312/api/";
-		private string _currentView = "Book"; // Track the current view
-		private object _currentEntity; // Track the current entity
+		private string _currentView = "Book";
+		private object _currentEntity;
+		private FormMode _currentMode = FormMode.None;
 
 		public MainForm()
 		{
@@ -21,7 +33,10 @@ namespace LibraryFrontend
 			LoadInitialEntities();
 			pictureBox1.Click += PictureBox1_Click;
 			deleteButton.Click += deleteButton_Click;
+			cancelButton.Click += cancelButton_Click;
+			UpdateCancelButtonState();
 		}
+
 		private async void searchButton_Click(object sender, EventArgs e)
 		{
 			var query = searchTextBox.Text;
@@ -47,11 +62,13 @@ namespace LibraryFrontend
 					break;
 			}
 		}
+
 		private async void clearSearchButton_Click(object sender, EventArgs e)
 		{
 			searchTextBox.Text = string.Empty;
 			await LoadEntitiesBasedOnCurrentView();
 		}
+
 		private async void PictureBox1_Click(object sender, EventArgs e)
 		{
 			if (_currentEntity is Book book)
@@ -91,30 +108,39 @@ namespace LibraryFrontend
 				MessageBox.Show("Samo knjige mogu imati sliku.");
 			}
 		}
+
 		private void editButton_Click(object sender, EventArgs e)
 		{
-			if (editTextBox.Visible)
+			try
 			{
-				// Cancel editing
-				editTextBox.Visible = false;
-				groupBox1.Visible = true;
-				editButton.Text = "Izmjeni";
-				saveChangesButton.Enabled = false;
-			}
-			else
-			{
-				// Start editing
+				_currentMode = FormMode.Edit;
 				ShowEditTextBox();
-				editButton.Text = "Otkaži";
 				saveChangesButton.Enabled = true;
+				UpdateCancelButtonState();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show($"Error: {ex.Message}");
 			}
 		}
+
+		private void cancelButton_Click(object sender, EventArgs e)
+		{
+			editTextBox.Visible = false;
+			groupBox1.Visible = true;
+			saveChangesButton.Enabled = false;
+			_currentMode = FormMode.None;
+			UpdateCancelButtonState();
+		}
+
 		private async void saveChangesButton_Click(object sender, EventArgs e)
 		{
 			await SaveJsonChanges();
-			editButton.Text = "Izmjeni";
 			saveChangesButton.Enabled = false;
+			_currentMode = FormMode.None;
+			UpdateCancelButtonState();
 		}
+
 		private async void deleteButton_Click(object sender, EventArgs e)
 		{
 			if (_currentEntity == null)
@@ -141,6 +167,14 @@ namespace LibraryFrontend
 					MessageBox.Show($"Error deleting item: {ex.Message}");
 				}
 			}
+		}
+
+		private void createButton_Click(object sender, EventArgs e)
+		{
+			_currentMode = FormMode.Add;
+			ShowEditTextBox();
+			saveChangesButton.Enabled = true;
+			UpdateCancelButtonState();
 		}
 	}
 }

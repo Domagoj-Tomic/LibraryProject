@@ -1,6 +1,8 @@
-﻿using LibraryShared.Converters;
+﻿using LibraryFrontend.LibraryFrontend;
+using LibraryShared.Converters;
 using LibraryShared.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -13,7 +15,9 @@ namespace LibraryFrontend
 {
 	public partial class MainForm
 	{
-		
+		private List<ItemControl> _itemControls = new List<ItemControl>();
+		//private ItemControl _selectedItemControl;
+
 		private async void LoadInitialEntities()
 		{
 			bookButton.Enabled = false; // Grey out the book button initially
@@ -29,6 +33,7 @@ namespace LibraryFrontend
 			saveChangesButton.Click += saveChangesButton_Click;
 			deleteButton.Click += deleteButton_Click;
 			createButton.Click += createButton_Click;
+
 			saveChangesButton.Enabled = false;
 		}
 
@@ -93,6 +98,7 @@ namespace LibraryFrontend
 			}
 			var bookItem = new ItemControl(book.Title, book.Author, coverImage);
 			bookItem.ItemClicked += (sender, e) => ShowBookDetails(book);
+			bookItem.JoinButtonClicked += (sender, e) => JoinItems(book);
 			flowLayoutPanel1.Controls.Add(bookItem);
 		}
 
@@ -100,6 +106,7 @@ namespace LibraryFrontend
 		{
 			var userItem = new ItemControl($"{user.FirstName} {user.LastName}", user.Email, null);
 			userItem.ItemClicked += (sender, e) => ShowUserDetails(user);
+			userItem.JoinButtonClicked += (sender, e) => JoinItems(user);
 			flowLayoutPanel1.Controls.Add(userItem);
 		}
 
@@ -107,6 +114,7 @@ namespace LibraryFrontend
 		{
 			var workshopItem = new ItemControl(workshop.Name, $"Attendees: {workshop.NumberOfAttendees}", null);
 			workshopItem.ItemClicked += (sender, e) => ShowWorkshopDetails(workshop);
+			workshopItem.JoinButtonClicked += (sender, e) => JoinItems(workshop);
 			flowLayoutPanel1.Controls.Add(workshopItem);
 		}
 
@@ -150,11 +158,11 @@ namespace LibraryFrontend
 			_currentEntity = user;
 			groupBox1.Controls.Clear();
 
-			var nameLabel = new Label { Text = $"Name: {user.FirstName} {user.LastName}", AutoSize = true, Location = new System.Drawing.Point(10, 20) };
+			var nameLabel = new Label { Text = $"Ime: {user.FirstName} {user.LastName}", AutoSize = true, Location = new System.Drawing.Point(10, 20) };
 			var emailLabel = new Label { Text = $"Email: {user.Email}", AutoSize = true, Location = new System.Drawing.Point(10, 50) };
-			var addressLabel = new Label { Text = $"Address: {user.Address}", AutoSize = true, Location = new System.Drawing.Point(10, 80) };
-			var dobLabel = new Label { Text = $"Date of Birth: {user.DateOfBirth.ToShortDateString()}", AutoSize = true, Location = new System.Drawing.Point(10, 110) };
-			var phoneLabel = new Label { Text = $"Phone: {user.PhoneNumber}", AutoSize = true, Location = new System.Drawing.Point(10, 140) };
+			var addressLabel = new Label { Text = $"Adresa: {user.Address}", AutoSize = true, Location = new System.Drawing.Point(10, 80) };
+			var dobLabel = new Label { Text = $"Datum rođenja: {user.DateOfBirth.ToShortDateString()}", AutoSize = true, Location = new System.Drawing.Point(10, 110) };
+			var phoneLabel = new Label { Text = $"Telefon: {user.PhoneNumber}", AutoSize = true, Location = new System.Drawing.Point(10, 140) };
 
 			groupBox1.Controls.Add(nameLabel);
 			groupBox1.Controls.Add(emailLabel);
@@ -168,10 +176,10 @@ namespace LibraryFrontend
 			_currentEntity = workshop;
 			groupBox1.Controls.Clear();
 
-			var nameLabel = new Label { Text = $"Name: {workshop.Name}", AutoSize = true, Location = new System.Drawing.Point(10, 20) };
-			var attendeesLabel = new Label { Text = $"Number of Attendees: {workshop.NumberOfAttendees}", AutoSize = true, Location = new System.Drawing.Point(10, 50) };
-			var durationLabel = new Label { Text = $"Duration: {workshop.DurationMinutes} minutes", AutoSize = true, Location = new System.Drawing.Point(10, 80) };
-			var startDateLabel = new Label { Text = $"Start Date: {workshop.StartDate.ToShortDateString()}", AutoSize = true, Location = new System.Drawing.Point(10, 110) };
+			var nameLabel = new Label { Text = $"Ime: {workshop.Name}", AutoSize = true, Location = new System.Drawing.Point(10, 20) };
+			var attendeesLabel = new Label { Text = $"Broj polaznika: {workshop.NumberOfAttendees}", AutoSize = true, Location = new System.Drawing.Point(10, 50) };
+			var durationLabel = new Label { Text = $"Trajanje u minutama: {workshop.DurationMinutes} minutes", AutoSize = true, Location = new System.Drawing.Point(10, 80) };
+			var startDateLabel = new Label { Text = $"Datum početka: {workshop.StartDate.ToShortDateString()}", AutoSize = true, Location = new System.Drawing.Point(10, 110) };
 
 			groupBox1.Controls.Add(nameLabel);
 			groupBox1.Controls.Add(attendeesLabel);
@@ -181,9 +189,19 @@ namespace LibraryFrontend
 
 		private void ShowEditTextBox()
 		{
-			if (_currentEntity != null)
+			if (_currentEntity != null || _currentMode == FormMode.Add)
 			{
-				editTextBox.Text = JsonConvert.SerializeObject(_currentEntity, Formatting.Indented);
+				string jsonContent;
+				if (_currentMode == FormMode.Add)
+				{
+					jsonContent = GetJsonTemplate(_currentView);
+				}
+				else
+				{
+					jsonContent = FilterPropertiesForEditOrAdd(_currentEntity);
+				}
+
+				editTextBox.Text = jsonContent;
 				editTextBox.Visible = true;
 				groupBox1.Visible = false;
 			}
@@ -330,7 +348,6 @@ namespace LibraryFrontend
 			return JsonConvert.DeserializeObject<List<T>>(jsonString);
 		}
 
-
 		private string GetJsonTemplate(string entityType)
 		{
 			switch (entityType)
@@ -343,8 +360,8 @@ namespace LibraryFrontend
 						ISBN = "Unesite ISBN",
 						NumberOfCopies = 0,
 						Category = "Unesite kategoriju",
-						BorrowingAllowed = false,
-						CoverImage = (byte[])null
+						BorrowingAllowed = false/*,
+										CoverImage = (byte[])null*/
 					}, Formatting.Indented);
 				case "User":
 					return JsonConvert.SerializeObject(new
@@ -381,15 +398,47 @@ namespace LibraryFrontend
 					throw new InvalidOperationException("Unknown entity type");
 			}
 		}
-		private void createButton_Click(object sender, EventArgs e)
+
+		private void UpdateCancelButtonState()
 		{
-			var jsonTemplate = GetJsonTemplate(_currentView);
-			editTextBox.Text = jsonTemplate;
-			editTextBox.Visible = true;
-			groupBox1.Visible = false;
-			editButton.Text = "Otkaži";
-			saveChangesButton.Enabled = true;
-			_currentEntity = null; // Clear the current entity to indicate a new creation
+			cancelButton.Enabled = _currentMode == FormMode.Edit || _currentMode == FormMode.Add;
+		}
+
+		private string FilterPropertiesForEditOrAdd(object entity)
+		{
+			var jsonObject = JObject.FromObject(entity);
+			jsonObject.Remove("BookID");
+			jsonObject.Remove("UserID");
+			jsonObject.Remove("WorkshopID");
+			jsonObject.Remove("CoverImage");
+			return jsonObject.ToString(Formatting.Indented);
+		}
+
+		private void JoinItems(object entity)
+		{
+			int itemId;
+			string itemType;
+
+			switch (entity)
+			{
+				case Book book:
+					itemId = book.BookID;
+					itemType = "Book";
+					break;
+				case User user:
+					itemId = user.UserID;
+					itemType = "User";
+					break;
+				case Workshop workshop:
+					itemId = workshop.WorkshopID;
+					itemType = "Workshop";
+					break;
+				default:
+					throw new InvalidOperationException("Unknown entity type");
+			}
+
+			var joinForm = new JoinForm(itemId, itemType);
+			joinForm.ShowDialog();
 		}
 	}
 }
