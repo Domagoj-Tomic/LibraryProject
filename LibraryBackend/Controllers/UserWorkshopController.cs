@@ -11,45 +11,73 @@ namespace LibraryBackend.Controllers
 		{
 		}
 
-		// POST: api/UserWorkshop/AddUserToWorkshop
+		// POST: api/UserWorkshop
 		[HttpPost]
-		[Route("AddUserToWorkshop")]
-		public IHttpActionResult AddUserToWorkshop(int workshopId, List<int> userIds)
+		[Route("api/UserWorkshop")]
+		public override IHttpActionResult Post(UserWorkshop entity)
 		{
-			foreach (var userId in userIds)
+			if (!ModelState.IsValid)
 			{
-				var userWorkshop = new UserWorkshop
-				{
-					UserID = userId,
-					WorkshopID = workshopId
-				};
-
-				Post(userWorkshop);
+				return BadRequest(ModelState);
 			}
 
-			return Ok();
+			// Check if the UserWorkshop record already exists
+			var existingUserWorkshop = _context.Set<UserWorkshop>()
+				.FirstOrDefault(uw => uw.UserID == entity.UserID && uw.WorkshopID == entity.WorkshopID);
+
+			if (existingUserWorkshop != null)
+			{
+				return Conflict(); // Return a conflict response
+			}
+
+			_dbSet.Add(entity);
+			_context.SaveChanges();
+
+			var key = GetPrimaryKeyValue(entity);
+			return CreatedAtRoute("DefaultApi", new { id = key }, entity);
 		}
 
-		// GET: api/UserWorkshop/Workshop/{workshopId}/Users
+		// GET: api/UserWorkshop/{workshopId}/Users
 		[HttpGet]
-		[Route("Workshop/{workshopId}/Users")]
+		[Route("api/UserWorkshop/{workshopId}/Users")]
 		public IHttpActionResult GetUsersByWorkshop(int workshopId)
 		{
 			var users = from uw in _context.Set<UserWorkshop>()
 						where uw.WorkshopID == workshopId
-						select uw.User;
+						select new
+						{
+							uw.User.UserID,
+							uw.User.FirstName,
+							uw.User.LastName,
+							uw.User.Email,
+							uw.User.Username,
+							uw.User.PhoneNumber
+						};
 
 			return Ok(users.ToList());
 		}
 
-		// GET: api/UserWorkshop/User/{userId}/Workshops
+		// GET: api/UserWorkshop/{userId}/Workshops
 		[HttpGet]
-		[Route("User/{userId}/Workshops")]
+		[Route("api/UserWorkshop/{userId}/Workshops")]
 		public IHttpActionResult GetWorkshopsByUser(int userId)
 		{
 			var workshops = from uw in _context.Set<UserWorkshop>()
 							where uw.UserID == userId
-							select uw.Workshop;
+							select new
+							{
+								uw.Workshop.WorkshopID,
+								uw.Workshop.Name,
+								uw.Workshop.NumberOfAttendees,
+								uw.Workshop.DurationMinutes,
+								uw.Workshop.StartDate,
+								uw.Workshop.NumberOfTerms,
+								uw.Workshop.Monday,
+								uw.Workshop.Tuesday,
+								uw.Workshop.Wednesday,
+								uw.Workshop.Thursday,
+								uw.Workshop.Friday
+							};
 
 			return Ok(workshops.ToList());
 		}

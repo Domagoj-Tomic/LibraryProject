@@ -158,7 +158,9 @@ namespace LibraryFrontend
 					var json = JsonConvert.SerializeObject(payload);
 					var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-					response = await _httpClient.PostAsync($"{ApiBaseUrl}UserBook/AddBookToUser", content);
+					response = await _httpClient.PostAsync($"{ApiBaseUrl}UserBook/", content);
+
+					Console.WriteLine(json);
 				}
 				else if (_itemType == "User" && entity is Workshop workshop)
 				{
@@ -175,7 +177,7 @@ namespace LibraryFrontend
 					var json = JsonConvert.SerializeObject(payload);
 					var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-					response = await _httpClient.PostAsync($"{ApiBaseUrl}UserWorkshop/AddUserToWorkshop", content);
+					response = await _httpClient.PostAsync($"{ApiBaseUrl}UserWorkshop/", content);
 				}
 				else if (_itemType == "Book" && entity is User user)
 				{
@@ -196,7 +198,7 @@ namespace LibraryFrontend
 					var json = JsonConvert.SerializeObject(payload);
 					var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-					response = await _httpClient.PostAsync($"{ApiBaseUrl}UserBook/AddUserToBook", content);
+					response = await _httpClient.PostAsync($"{ApiBaseUrl}UserBook/", content);
 				}
 				else if (_itemType == "Workshop" && entity is User workshopUser)
 				{
@@ -213,7 +215,7 @@ namespace LibraryFrontend
 					var json = JsonConvert.SerializeObject(payload);
 					var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-					response = await _httpClient.PostAsync($"{ApiBaseUrl}UserWorkshop/AddUserToWorkshop", content);
+					response = await _httpClient.PostAsync($"{ApiBaseUrl}UserWorkshop/", content);
 				}
 
 				if (response != null)

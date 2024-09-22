@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Dynamic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -119,19 +120,20 @@ namespace LibraryFrontend
 			flowLayoutPanel1.Controls.Add(workshopItem);
 		}
 
-		private void ShowBookDetails(Book book)
+		private async void ShowBookDetails(Book book)
 		{
 			_currentEntity = book;
 			string borrowingAllowedHrv = book.BorrowingAllowed ? "Posudba dozvoljena" : "Posudba nije dozvoljena";
+			var users = await GetUsersByBookId(book.BookID);
 
 			groupBox1.Controls.Clear();
 
-			var titleLabel = new Label { Text = $"Naslov: {book.Title}", AutoSize = true, Location = new System.Drawing.Point(10, 20) };
-			var authorLabel = new Label { Text = $"Autor: {book.Author}", AutoSize = true, Location = new System.Drawing.Point(10, 50) };
-			var isbnLabel = new Label { Text = $"ISBN: {book.ISBN}", AutoSize = true, Location = new System.Drawing.Point(10, 80) };
-			var copiesLabel = new Label { Text = $"Broj primjeraka: {book.NumberOfCopies}", AutoSize = true, Location = new System.Drawing.Point(10, 110) };
-			var categoryLabel = new Label { Text = $"Kategorija: {book.Category}", AutoSize = true, Location = new System.Drawing.Point(10, 140) };
-			var borrowingAllowedLabel = new Label { Text = $"{borrowingAllowedHrv}", AutoSize = true, Location = new System.Drawing.Point(10, 170) };
+			var titleLabel = new Label { Text = $"Naslov: {book.Title}", AutoSize = true, Location = new Point(10, 20) };
+			var authorLabel = new Label { Text = $"Autor: {book.Author}", AutoSize = true, Location = new Point(10, 50) };
+			var isbnLabel = new Label { Text = $"ISBN: {book.ISBN}", AutoSize = true, Location = new Point(10, 80) };
+			var copiesLabel = new Label { Text = $"Broj primjeraka: {book.NumberOfCopies}", AutoSize = true, Location = new Point(10, 110) };
+			var categoryLabel = new Label { Text = $"Kategorija: {book.Category}", AutoSize = true, Location = new Point(10, 140) };
+			var borrowingAllowedLabel = new Label { Text = $"{borrowingAllowedHrv}", AutoSize = true, Location = new Point(10, 170) };
 
 			groupBox1.Controls.Add(titleLabel);
 			groupBox1.Controls.Add(authorLabel);
@@ -139,6 +141,25 @@ namespace LibraryFrontend
 			groupBox1.Controls.Add(copiesLabel);
 			groupBox1.Controls.Add(categoryLabel);
 			groupBox1.Controls.Add(borrowingAllowedLabel);
+
+			if (users != null && users.Count > 0)
+			{
+				var borrowedByLabel = new Label { Text = "Knjigu posudio:", AutoSize = true, Location = new Point(10, 200) };
+				groupBox1.Controls.Add(borrowedByLabel);
+
+				int i = 0;
+				foreach (var user in users)
+				{
+					var userLabel = new Label { Text = $"{user.FirstName} {user.LastName} ({user.Email})", AutoSize = true, Location = new Point(30, 230 + i) };
+					groupBox1.Controls.Add(userLabel);
+					i += 30;
+				}
+			}
+			else
+			{
+				var noBorrowersLabel = new Label { Text = "Knjigu nitko nije posudio.", AutoSize = true, Location = new Point(10, 200) };
+				groupBox1.Controls.Add(noBorrowersLabel);
+			}
 
 			if (book.CoverImage != null && book.CoverImage.Length > 0)
 			{
@@ -154,38 +175,99 @@ namespace LibraryFrontend
 			}
 		}
 
-		private void ShowUserDetails(User user)
+		private async void ShowUserDetails(User user)
 		{
 			_currentEntity = user;
 			groupBox1.Controls.Clear();
+			var books = await GetBooksByUserId(user.UserID);
+			var workshops = await GetWorkshopsByUserId(user.UserID);
 
-			var nameLabel = new Label { Text = $"Ime: {user.FirstName} {user.LastName}", AutoSize = true, Location = new System.Drawing.Point(10, 20) };
-			var emailLabel = new Label { Text = $"Email: {user.Email}", AutoSize = true, Location = new System.Drawing.Point(10, 50) };
-			var addressLabel = new Label { Text = $"Adresa: {user.Address}", AutoSize = true, Location = new System.Drawing.Point(10, 80) };
-			var dobLabel = new Label { Text = $"Datum rođenja: {user.DateOfBirth.ToShortDateString()}", AutoSize = true, Location = new System.Drawing.Point(10, 110) };
-			var phoneLabel = new Label { Text = $"Telefon: {user.PhoneNumber}", AutoSize = true, Location = new System.Drawing.Point(10, 140) };
+			var nameLabel = new Label { Text = $"Ime: {user.FirstName} {user.LastName}", AutoSize = true, Location = new Point(10, 20) };
+			var emailLabel = new Label { Text = $"Email: {user.Email}", AutoSize = true, Location = new Point(10, 50) };
+			var addressLabel = new Label { Text = $"Adresa: {user.Address}", AutoSize = true, Location = new Point(10, 80) };
+			var dobLabel = new Label { Text = $"Datum rođenja: {user.DateOfBirth.ToShortDateString()}", AutoSize = true, Location = new Point(10, 110) };
+			var phoneLabel = new Label { Text = $"Telefon: {user.PhoneNumber}", AutoSize = true, Location = new Point(10, 140) };
+
+			int linesWritten = 0;
 
 			groupBox1.Controls.Add(nameLabel);
 			groupBox1.Controls.Add(emailLabel);
 			groupBox1.Controls.Add(addressLabel);
 			groupBox1.Controls.Add(dobLabel);
 			groupBox1.Controls.Add(phoneLabel);
+
+			if (books != null && books.Count > 0)
+			{
+				var borrowedBooksLabel = new Label { Text = "Posuđene knjige:", AutoSize = true, Location = new Point(10, 170) };
+				groupBox1.Controls.Add(borrowedBooksLabel);
+
+				foreach (var book in books)
+				{
+					var bookLabel = new Label { Text = $"{book.Title} ({book.Author})", AutoSize = true, Location = new Point(30, 200 + linesWritten) };
+					groupBox1.Controls.Add(bookLabel);
+					linesWritten += 30;
+				}
+			}
+			else
+			{
+				var noBooksLabel = new Label { Text = "Korisnik nije posudio nijednu knjigu.", AutoSize = true, Location = new Point(10, 170) };
+				groupBox1.Controls.Add(noBooksLabel);
+			}
+
+			if (workshops != null && workshops.Count > 0)
+			{
+				var enrolledWorkshopsLabel = new Label { Text = "Upisane radionice:", AutoSize = true, Location = new Point(10, 200 + linesWritten) };
+				groupBox1.Controls.Add(enrolledWorkshopsLabel);
+
+				foreach (var workshop in workshops)
+				{
+					var workshopLabel = new Label { Text = $"{workshop.Name} ({workshop.StartDate.ToShortDateString()})", AutoSize = true, Location = new Point(30, 230 + linesWritten) };
+					groupBox1.Controls.Add(workshopLabel);
+					linesWritten += 30;
+				}
+			}
+			else
+			{
+				var noWorkshopsLabel = new Label { Text = "Korisnik nije upisan ni na jednu radionicu.", AutoSize = true, Location = new Point(10, 200 + linesWritten) };
+				groupBox1.Controls.Add(noWorkshopsLabel);
+			}
 		}
 
-		private void ShowWorkshopDetails(Workshop workshop)
+		private async void ShowWorkshopDetails(Workshop workshop)
 		{
 			_currentEntity = workshop;
 			groupBox1.Controls.Clear();
+			var users = await GetUsersByWorkshopId(workshop.WorkshopID);
 
-			var nameLabel = new Label { Text = $"Ime: {workshop.Name}", AutoSize = true, Location = new System.Drawing.Point(10, 20) };
-			var attendeesLabel = new Label { Text = $"Broj polaznika: {workshop.NumberOfAttendees}", AutoSize = true, Location = new System.Drawing.Point(10, 50) };
-			var durationLabel = new Label { Text = $"Trajanje u minutama: {workshop.DurationMinutes} minutes", AutoSize = true, Location = new System.Drawing.Point(10, 80) };
-			var startDateLabel = new Label { Text = $"Datum početka: {workshop.StartDate.ToShortDateString()}", AutoSize = true, Location = new System.Drawing.Point(10, 110) };
+			var nameLabel = new Label { Text = $"Ime: {workshop.Name}", AutoSize = true, Location = new Point(10, 20) };
+			var numberOfAttendeesLabel = new Label { Text = $"Broj polaznika: {workshop.NumberOfAttendees}", AutoSize = true, Location = new Point(10, 50) };
+			var durationLabel = new Label { Text = $"Trajanje u minutama: {workshop.DurationMinutes} minutes", AutoSize = true, Location = new Point(10, 80) };
+			var startDateLabel = new Label { Text = $"Datum početka: {workshop.StartDate.ToShortDateString()}", AutoSize = true, Location = new Point(10, 110) };
+
+			int linesWritten = 0;
 
 			groupBox1.Controls.Add(nameLabel);
-			groupBox1.Controls.Add(attendeesLabel);
+			groupBox1.Controls.Add(numberOfAttendeesLabel);
 			groupBox1.Controls.Add(durationLabel);
 			groupBox1.Controls.Add(startDateLabel);
+
+			if (users != null && users.Count > 0)
+			{
+				var attendeesLabel = new Label { Text = "Polaznici radionice:", AutoSize = true, Location = new Point(10, 140) };
+				groupBox1.Controls.Add(attendeesLabel);
+
+				foreach (var user in users)
+				{
+					var userLabel = new Label { Text = $"{user.FirstName} {user.LastName} ({user.Email})", AutoSize = true, Location = new Point(30, 170 + linesWritten) };
+					groupBox1.Controls.Add(userLabel);
+					linesWritten += 30;
+				}
+			}
+			else
+			{
+				var noAttendeesLabel = new Label { Text = "Na radionicu nije upisan nijedan polaznik.", AutoSize = true, Location = new Point(10, 140) };
+				groupBox1.Controls.Add(noAttendeesLabel);
+			}
 		}
 
 		private void ShowEditTextBox()
@@ -444,10 +526,34 @@ namespace LibraryFrontend
 
 		private async Task<List<User>> GetUsersByBookId(int bookId)
 		{
-			var response = await _httpClient.GetAsync($"{ApiBaseUrl}UserBook/Book/{bookId}/Users");
+			var response = await _httpClient.GetAsync($"{ApiBaseUrl}UserBook/{bookId}/Users");
 			response.EnsureSuccessStatusCode();
 			var jsonResponse = await response.Content.ReadAsStringAsync();
 			return JsonConvert.DeserializeObject<List<User>>(jsonResponse);
+		}
+
+		private async Task<List<Book>> GetBooksByUserId(int userId)
+		{
+			var response = await _httpClient.GetAsync($"{ApiBaseUrl}UserBook/{userId}/Books");
+			response.EnsureSuccessStatusCode();
+			var jsonResponse = await response.Content.ReadAsStringAsync();
+			return JsonConvert.DeserializeObject<List<Book>>(jsonResponse);
+		}
+
+		private async Task<List<User>> GetUsersByWorkshopId(int workshopId)
+		{
+			var response = await _httpClient.GetAsync($"{ApiBaseUrl}UserWorkshop/{workshopId}/Users");
+			response.EnsureSuccessStatusCode();
+			var jsonResponse = await response.Content.ReadAsStringAsync();
+			return JsonConvert.DeserializeObject<List<User>>(jsonResponse);
+		}
+
+		private async Task<List<Workshop>> GetWorkshopsByUserId(int userId)
+		{
+			var response = await _httpClient.GetAsync($"{ApiBaseUrl}UserWorkshop/{userId}/Workshops");
+			response.EnsureSuccessStatusCode();
+			var jsonResponse = await response.Content.ReadAsStringAsync();
+			return JsonConvert.DeserializeObject<List<Workshop>>(jsonResponse);
 		}
 	}
 }

@@ -26,16 +26,10 @@ namespace LibraryBackend.Controllers
 				.WriteTo.File(
 					path: System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "log.txt"),
 					rollingInterval: RollingInterval.Day)
-				.CreateLogger();*/
+				.CreateLogger();
 
 			// Enable SQL logging
-			_context.Database.Log = sql => Log.Debug(sql);
-
-			Log.Information("" +
-				"\n~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~" +
-				"\n~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~O~" +
-				"\n"
-				);
+			_context.Database.Log = sql => Log.Debug(sql);*/
 		}
 
 		// GET: api/[controller]/{id}
@@ -155,7 +149,7 @@ namespace LibraryBackend.Controllers
 		// POST: api/[controller]
 		[HttpPost]
 		[Route("")]
-		public IHttpActionResult Post(TEntity entity)
+		public virtual IHttpActionResult Post(TEntity entity)
 		{
 			Log.Information("Creating a new entity");
 			if (!ModelState.IsValid)
@@ -192,12 +186,12 @@ namespace LibraryBackend.Controllers
 			return Ok(entity);
 		}
 
-		private bool EntityExists(int id)
+		protected bool EntityExists(int id)
 		{
 			return _dbSet.Find(id) != null;
 		}
 
-		private object GetPrimaryKeyValue(TEntity entity)
+		protected object GetPrimaryKeyValue(TEntity entity)
 		{
 			var keyProperty = typeof(TEntity).GetProperties()
 				.FirstOrDefault(p => p.GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.KeyAttribute), true).Length > 0);
