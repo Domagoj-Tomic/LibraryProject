@@ -61,6 +61,7 @@ namespace LibraryFrontend
 		private async Task<List<T>> GetEntities<T>(string endpoint, int limit)
 		{
 			var response = await _httpClient.GetAsync($"{ApiBaseUrl}{endpoint}?limit={limit}");
+			//Console.WriteLine("Response content: " + await response.Content.ReadAsStringAsync());
 			response.EnsureSuccessStatusCode();
 			var jsonString = await response.Content.ReadAsStringAsync();
 			return JsonConvert.DeserializeObject<List<T>>(jsonString);
@@ -439,6 +440,14 @@ namespace LibraryFrontend
 
 			var joinForm = new JoinForm(itemId, itemType);
 			joinForm.ShowDialog();
+		}
+
+		private async Task<List<User>> GetUsersByBookId(int bookId)
+		{
+			var response = await _httpClient.GetAsync($"{ApiBaseUrl}UserBook/Book/{bookId}/Users");
+			response.EnsureSuccessStatusCode();
+			var jsonResponse = await response.Content.ReadAsStringAsync();
+			return JsonConvert.DeserializeObject<List<User>>(jsonResponse);
 		}
 	}
 }

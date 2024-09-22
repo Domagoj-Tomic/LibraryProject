@@ -11,7 +11,7 @@ namespace LibraryFrontend
 		public string Category;
 		public int Id;
 
-		public ItemControl(string title, string author, Image coverImage)
+		public ItemControl(string title, string author, Image coverImage, bool enableJoinButton = true)
 		{
 			InitializeComponent();
 			titleLabel.Text = title;
@@ -23,7 +23,11 @@ namespace LibraryFrontend
 			authorLabel.Click += itemControl_Click;
 			thumbnailPictureBox.Click += itemControl_Click;
 
-			joinButton.Click += joinButton_Click;
+			if (enableJoinButton)
+			{
+				joinButton.Visible = true;
+				joinButton.Click += joinButton_Click;
+			}
 		}
 
 		public void itemControl_Click(object sender, EventArgs e)

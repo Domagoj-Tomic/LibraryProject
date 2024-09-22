@@ -69,6 +69,7 @@
 			this.joinButton.TabIndex = 3;
 			this.joinButton.Text = "Pridjeli";
 			this.joinButton.UseVisualStyleBackColor = true;
+			this.joinButton.Visible = false;
 			// 
 			// ItemControl
 			// 

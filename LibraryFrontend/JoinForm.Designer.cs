@@ -30,7 +30,6 @@
 		{
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.workshopButton = new System.Windows.Forms.Button();
-			this.userButton = new System.Windows.Forms.Button();
 			this.bookButton = new System.Windows.Forms.Button();
 			this.clearSearchButton = new System.Windows.Forms.Button();
 			this.searchButton = new System.Windows.Forms.Button();
@@ -49,21 +48,12 @@
 			// 
 			// workshopButton
 			// 
-			this.workshopButton.Location = new System.Drawing.Point(501, 69);
+			this.workshopButton.Location = new System.Drawing.Point(427, 69);
 			this.workshopButton.Name = "workshopButton";
 			this.workshopButton.Size = new System.Drawing.Size(68, 21);
 			this.workshopButton.TabIndex = 15;
 			this.workshopButton.Text = "Radionice";
 			this.workshopButton.UseVisualStyleBackColor = true;
-			// 
-			// userButton
-			// 
-			this.userButton.Location = new System.Drawing.Point(427, 69);
-			this.userButton.Name = "userButton";
-			this.userButton.Size = new System.Drawing.Size(68, 21);
-			this.userButton.TabIndex = 14;
-			this.userButton.Text = "Korisnici";
-			this.userButton.UseVisualStyleBackColor = true;
 			// 
 			// bookButton
 			// 
@@ -105,7 +95,6 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(608, 555);
 			this.Controls.Add(this.workshopButton);
-			this.Controls.Add(this.userButton);
 			this.Controls.Add(this.bookButton);
 			this.Controls.Add(this.clearSearchButton);
 			this.Controls.Add(this.searchButton);
@@ -122,7 +111,6 @@
 
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		private System.Windows.Forms.Button workshopButton;
-		private System.Windows.Forms.Button userButton;
 		private System.Windows.Forms.Button bookButton;
 		private System.Windows.Forms.Button clearSearchButton;
 		private System.Windows.Forms.Button searchButton;
